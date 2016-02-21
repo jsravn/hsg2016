@@ -78,6 +78,16 @@ ex6Tests = [ Test "hanoi test" testHanoi
              ]
            ]
 
+-- Exercise 7 -----------------------------------------
+
+testHanoi4 :: (Integer, Int) -> Bool
+testHanoi4 (a, b) = length (hanoi4 a "a" "b" "c" "d") == b
+
+ex7Tests :: [Test]
+ex7Tests = [ Test "hanoi4 test" testHanoi4
+             [(1, 1), (2, 3), (3, 5), (6, 17), (15, 129)]
+           ]
+
 -- All Tests ------------------------------------------
 
 allTests :: [Test]

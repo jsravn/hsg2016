@@ -46,3 +46,12 @@ type Move = (Peg, Peg)
 hanoi :: Integer -> Peg -> Peg -> Peg -> [Move]
 hanoi 0 _ _ _ = []
 hanoi n a b c = hanoi (n - 1) a c b ++ [(a, c)] ++ hanoi (n - 1) b a c
+
+-- Exercise 7 -----------------------------------------
+
+hanoi4 :: Integer -> Peg -> Peg -> Peg -> Peg -> [Move]
+hanoi4 0 _ _ _ _ = []
+hanoi4 n a b c d = hanoi4 (n - k) a b d c
+                   ++ hanoi k a b d
+                   ++ hanoi4 (n - k) c a b d
+  where k = floor $ sqrt (2 * fromInteger n :: Double)
