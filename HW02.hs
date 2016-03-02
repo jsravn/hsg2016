@@ -42,17 +42,20 @@ matches a b = sum . map (uncurry min) $ zip (countColors a) (countColors b)
 
 -- Construct a Move from a guess given the actual code
 getMove :: Code -> Code -> Move
-getMove = undefined
+getMove secret guess = Move guess exact nonExact
+  where exact = exactMatches secret guess
+        nonExact = matches secret guess - exact
 
 -- Exercise 4 -----------------------------------------
 
 isConsistent :: Move -> Code -> Bool
-isConsistent = undefined
+isConsistent m@(Move guess _ _) secret = m == newMove
+  where newMove = getMove secret guess
 
 -- Exercise 5 -----------------------------------------
 
 filterCodes :: Move -> [Code] -> [Code]
-filterCodes = undefined
+filterCodes = filter . isConsistent
 
 -- Exercise 6 -----------------------------------------
 
