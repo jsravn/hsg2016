@@ -62,7 +62,9 @@ ex5Tests = [ testF2 "filterCodes test" filterCodes
 -- Exercise 6 -----------------------------------------
 
 ex6Tests :: [Test]
-ex6Tests = []
+ex6Tests = [ testF1 "allCodes test" allCodes
+             [ (1, [[Red], [Green], [Blue], [Yellow], [Orange], [Purple]])]
+           ]
 
 -- Exercise 7 -----------------------------------------
 

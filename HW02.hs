@@ -59,9 +59,15 @@ filterCodes = filter . isConsistent
 
 -- Exercise 6 -----------------------------------------
 
-allCodes :: Int -> [Code]
-allCodes = undefined
+addColor :: [Code] -> Peg -> [Code]
+addColor [] peg = [[peg]]
+addColor codes peg = map (peg:) codes
 
+allCodes :: Int -> [Code]
+allCodes n
+  | n < 1     = []
+  | otherwise = concatMap (addColor prevCodes) colors
+  where prevCodes = allCodes (n - 1)
 -- Exercise 7 -----------------------------------------
 
 solve :: Code -> [Move]
