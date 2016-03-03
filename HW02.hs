@@ -70,8 +70,23 @@ allCodes n
   where prevCodes = allCodes (n - 1)
 -- Exercise 7 -----------------------------------------
 
+solved :: Move -> Bool
+solved (Move g m _) = length g == m
+
+filterGuesses :: Move -> [Code] -> [Code]
+filterGuesses m = filter (isConsistent m)
+
+solve' :: Code -> [Code] -> [Move]
+solve' _ []          = []
+solve' secret (g:gs) = move : nextMoves
+  where
+    move = getMove secret g
+    nextMoves
+      | solved move = []
+      | otherwise   = solve' secret $ filterGuesses move gs
+
 solve :: Code -> [Move]
-solve = undefined
+solve secret = solve' secret (allCodes . length $ secret)
 
 -- Bonus ----------------------------------------------
 
