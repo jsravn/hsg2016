@@ -88,6 +88,28 @@ solve' secret (g:gs) = move : nextMoves
 solve :: Code -> [Move]
 solve secret = solve' secret (allCodes . length $ secret)
 
+-- Try better
+allMoves :: Code -> [Move]
+allMoves secret = map toMove $ allCodes (length secret)
+  where toMove = getMove secret
+
+isConsistentMove :: Move -> Move -> Bool
+isConsistentMove a (Move g _ _) = isConsistent a g
+
+consistentMoves :: [Move] -> [Move]
+consistentMoves []       =  []
+consistentMoves [x]      = [x]
+consistentMoves (x:y:ys)
+  | isConsistentMove x y = x : y : consistentMoves ys
+  | otherwise            = consistentMoves (x : ys)
+
+allConsistentMoves :: Code -> [Move]
+allConsistentMoves = consistentMoves . allMoves
+
+solve2 :: Code -> [Move]
+solve2 code = takeWhile (not . solved) (allConsistentMoves code)
+
+
 -- Bonus ----------------------------------------------
 
 fiveGuess :: Code -> [Move]

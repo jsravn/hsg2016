@@ -69,7 +69,17 @@ ex6Tests = [ testF1 "allCodes test" allCodes
 -- Exercise 7 -----------------------------------------
 
 ex7Tests :: [Test]
-ex7Tests = []
+ex7Tests = [ testF1 "solve test" solve
+             [ ([Blue, Green, Blue],
+                [Move [Red,Red,Red] 0 0,
+                 Move [Green,Green,Green] 1 0,
+                 Move [Green,Blue,Blue] 1 2,
+                 Move [Blue,Green,Blue] 3 0]) ,
+               ([Blue, Blue, Blue],
+                [Move [Red,Red,Red] 0 0,
+                 Move [Green,Green,Green] 0 0,
+                 Move [Blue,Blue,Blue] 3 0])]
+           ]
 
 -- Bonus ----------------------------------------------
 
