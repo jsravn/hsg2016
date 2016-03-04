@@ -73,22 +73,6 @@ allCodes n
 solved :: Move -> Bool
 solved (Move g m _) = length g == m
 
-filterGuesses :: Move -> [Code] -> [Code]
-filterGuesses m = filter (isConsistent m)
-
-solve' :: Code -> [Code] -> [Move]
-solve' _ []          = []
-solve' secret (g:gs) = move : nextMoves
-  where
-    move = getMove secret g
-    nextMoves
-      | solved move = []
-      | otherwise   = solve' secret $ filterGuesses move gs
-
-solve :: Code -> [Move]
-solve secret = solve' secret (allCodes . length $ secret)
-
--- Try better
 allMoves :: Code -> [Move]
 allMoves secret = map toMove $ allCodes (length secret)
   where toMove = getMove secret
@@ -98,17 +82,20 @@ isConsistentMove a (Move g _ _) = isConsistent a g
 
 consistentMoves :: [Move] -> [Move]
 consistentMoves []       =  []
-consistentMoves [x]      = [x]
-consistentMoves (x:y:ys)
-  | isConsistentMove x y = x : y : consistentMoves ys
-  | otherwise            = consistentMoves (x : ys)
+consistentMoves (x:xs)   = x : consistentMoves filteredXs
+  where filteredXs = filter (isConsistentMove x) xs
 
 allConsistentMoves :: Code -> [Move]
 allConsistentMoves = consistentMoves . allMoves
 
-solve2 :: Code -> [Move]
-solve2 code = takeWhile (not . solved) (allConsistentMoves code)
+takeUntil               :: (a -> Bool) -> [a] -> [a]
+takeUntil _ []          =  []
+takeUntil p (x:xs)
+            | p x       =  [x]
+            | otherwise =  x : takeUntil p xs
 
+solve :: Code -> [Move]
+solve code = takeUntil solved (allConsistentMoves code)
 
 -- Bonus ----------------------------------------------
 
