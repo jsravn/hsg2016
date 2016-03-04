@@ -68,6 +68,7 @@ allCodes n
   | n < 1     = []
   | otherwise = concatMap (addColor prevCodes) colors
   where prevCodes = allCodes (n - 1)
+  
 -- Exercise 7 -----------------------------------------
 
 solved :: Move -> Bool
