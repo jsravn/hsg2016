@@ -85,14 +85,12 @@ ex7Tests = [ testF1 "solve test" solve
 
 bonusTests :: [Test]
 bonusTests = [ testF1 "solve test" fiveGuess
-             [ ([Red, Red, Green, Blue],
-                 [Move [Red,Red,Red,Red] 2 0,
-                 Move [Red,Red,Green,Green] 3 0,
-                 Move [Red,Red,Green,Blue] 4 0]),
-               ([Green, Red, Green, Blue],
-                 [Move [Red,Red,Red,Red] 1 0,
-                 Move [Red,Green,Green,Green] 1 2,
-                 Move [Green,Red,Green,Blue] 4 0])]
+             [ ([Red, Red, Green, Blue]
+             , [Move [Red,Red,Green,Green] 3 0,Move [Red,Green,Green,Blue] 3 0
+             , Move [Red,Red,Green,Blue] 4 0]),
+               ([Green, Red, Green, Blue]
+             , [Move [Red,Red,Green,Green] 2 1,Move [Red,Green,Green,Blue] 2 2
+             , Move [Red,Green,Blue,Green] 0 4,Move [Green,Red,Green,Blue] 4 0])]
            ]
 
 -- All Tests ------------------------------------------

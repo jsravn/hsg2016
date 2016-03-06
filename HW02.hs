@@ -116,18 +116,22 @@ rankGuesses gs s = map (\g -> (g, rankGuess g)) gs
     rankGuess = maximum . map remaining . outcomes
     remaining = length . (`filterCodes` s)
 
-bestGuess :: [(Code, Int)] -> Code
-bestGuess = fst . minimumBy (comparing snd)
+bestGuess :: [(Code, Int)] -> (Code, Int)
+bestGuess = minimumBy (comparing snd)
+
+bestGuess2 :: (Code, Int) -> (Code, Int) -> Code
+bestGuess2 (a, b) (a', b') = if b <= b' then a else a'
 
 fiveGuessMoves :: Code -> Code -> [Code] -> [Code] -> [Move]
 fiveGuessMoves secret guess codes consistentCodes = m : ms
   where
      m = getMove secret guess
      ms = fiveGuessMoves secret nextGuess nextCodes nextConsistentCodes
-     nextGuess = bestGuess rankedNextCodes
+     nextGuess = bestGuess2 bestNextConsistentCode bestNextCode
      nextCodes = delete guess codes
      nextConsistentCodes = filterCodes m consistentCodes
-     rankedNextCodes = rankGuesses nextCodes nextConsistentCodes
+     bestNextCode = bestGuess $ rankGuesses nextCodes nextConsistentCodes
+     bestNextConsistentCode = bestGuess $ rankGuesses nextConsistentCodes nextConsistentCodes
 
 fiveGuess :: Code -> [Move]
 fiveGuess secret
