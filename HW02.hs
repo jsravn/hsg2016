@@ -2,6 +2,7 @@
 module HW02 where
 
 import           Data.List
+import           Data.Ord
 
 -- Mastermind -----------------------------------------
 
@@ -95,9 +96,34 @@ takeUntil p (x:xs)
             | otherwise =  x : takeUntil p xs
 
 solve :: Code -> [Move]
-solve code = takeUntil solved (allConsistentMoves code)
+solve secret = takeUntil solved (allConsistentMoves secret)
 
 -- Bonus ----------------------------------------------
 
+rankGuesses :: [Code] -> [Code] -> [(Code, Int)]
+rankGuesses gs s = map (\g -> (g, rankGuess g)) gs
+  where
+     rankGuess g = minimum . goodness . toMoves g $ s
+     toMoves code = map (`getMove` code)
+     goodness = map (length . (`filterCodes` s))
+
+bestGuess :: [(Code, Int)] -> Code
+bestGuess = fst . maximumBy (comparing snd)
+
+fiveGuessMoves :: Code -> Code -> [Code] -> [Code] -> [Move]
+fiveGuessMoves secret guess codes consistentCodes = m : ms
+  where
+     m = getMove secret guess
+     ms = fiveGuessMoves secret nextGuess nextCodes nextConsistentCodes
+     nextGuess = bestGuess rankedNextCodes
+     nextCodes = delete nextGuess codes
+     nextConsistentCodes = filterCodes m consistentCodes
+     rankedNextCodes = rankGuesses nextCodes nextConsistentCodes
+
 fiveGuess :: Code -> [Move]
-fiveGuess = undefined
+fiveGuess secret
+  | length secret /= 4 = undefined
+  | otherwise          = takeUntil solved moves
+  where
+    moves     = fiveGuessMoves secret [Red, Red, Green, Green] all4Codes all4Codes
+    all4Codes = allCodes 4
