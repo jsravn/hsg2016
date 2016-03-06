@@ -101,15 +101,23 @@ solve secret = takeUntil solved (allConsistentMoves secret)
 
 -- Bonus ----------------------------------------------
 
+outcomes' :: Code -> Int -> [Move]
+outcomes' g n
+  | n < 0     = []
+  | otherwise = nMoves ++ outcomes' g (n - 1)
+  where nMoves = [ Move g a b | a <- [0..n], let b = n - a ]
+
+outcomes :: Code -> [Move]
+outcomes g = outcomes' g (length g)
+
 rankGuesses :: [Code] -> [Code] -> [(Code, Int)]
 rankGuesses gs s = map (\g -> (g, rankGuess g)) gs
   where
-     rankGuess g = minimum . goodness . toMoves g $ s
-     toMoves code = map (`getMove` code)
-     goodness = map ((length s -) . length . (`filterCodes` s))
+    rankGuess = maximum . map remaining . outcomes
+    remaining = length . (`filterCodes` s)
 
 bestGuess :: [(Code, Int)] -> Code
-bestGuess = fst . maximumBy (comparing snd)
+bestGuess = fst . minimumBy (comparing snd)
 
 fiveGuessMoves :: Code -> Code -> [Code] -> [Code] -> [Move]
 fiveGuessMoves secret guess codes consistentCodes = m : ms
@@ -117,7 +125,7 @@ fiveGuessMoves secret guess codes consistentCodes = m : ms
      m = getMove secret guess
      ms = fiveGuessMoves secret nextGuess nextCodes nextConsistentCodes
      nextGuess = bestGuess rankedNextCodes
-     nextCodes = delete nextGuess codes
+     nextCodes = delete guess codes
      nextConsistentCodes = filterCodes m consistentCodes
      rankedNextCodes = rankGuesses nextCodes nextConsistentCodes
 
