@@ -69,7 +69,7 @@ allCodes n
   | n < 1     = []
   | otherwise = concatMap (addColor prevCodes) colors
   where prevCodes = allCodes (n - 1)
-  
+
 -- Exercise 7 -----------------------------------------
 
 solved :: Move -> Bool
@@ -106,7 +106,7 @@ rankGuesses gs s = map (\g -> (g, rankGuess g)) gs
   where
      rankGuess g = minimum . goodness . toMoves g $ s
      toMoves code = map (`getMove` code)
-     goodness = map (length . (`filterCodes` s))
+     goodness = map ((length s -) . length . (`filterCodes` s))
 
 bestGuess :: [(Code, Int)] -> Code
 bestGuess = fst . maximumBy (comparing snd)
