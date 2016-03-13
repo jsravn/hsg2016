@@ -15,7 +15,7 @@ Study group questions:
 http://www.seas.upenn.edu/~cis194/lectures/03-ADTs.html
 
 Study group questions:
-- what are algebraic data types (ADTs)? are they simply enumerations?
+- what are algebraic data types (not ADTs)? are they simply enumerations?
 - what is the type of data constructor `OK`?
 - type constructor vs data constructor?
 - examples of Kinds
