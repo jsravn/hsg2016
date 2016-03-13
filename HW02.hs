@@ -75,20 +75,15 @@ allCodes n
 solved :: Move -> Bool
 solved (Move g m _) = length g == m
 
-allMoves :: Code -> [Move]
-allMoves secret = map toMove $ allCodes (length secret)
-  where toMove = getMove secret
-
-isConsistentMove :: Move -> Move -> Bool
-isConsistentMove a (Move g _ _) = isConsistent a g
-
-consistentMoves :: [Move] -> [Move]
-consistentMoves []       =  []
-consistentMoves (x:xs)   = x : consistentMoves filteredXs
-  where filteredXs = filter (isConsistentMove x) xs
+consistentMoves :: Code -> [Code] -> [Move]
+consistentMoves _ []            = []
+consistentMoves secret (x:xs)   = newMove : consistentMoves secret filteredXs
+  where
+    newMove = getMove secret x
+    filteredXs = filterCodes newMove xs
 
 allConsistentMoves :: Code -> [Move]
-allConsistentMoves = consistentMoves . allMoves
+allConsistentMoves secret = (consistentMoves secret) (allCodes $ length secret)
 
 takeUntil               :: (a -> Bool) -> [a] -> [a]
 takeUntil _ []          =  []

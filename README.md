@@ -2,7 +2,7 @@
 http://www.seas.upenn.edu/~cis194/lectures/02-lists.html
 
 Study group questions:
-- `let` vs `when`
+- `let` vs `where`
 - what is _parametricity_
 - partial function vs total function
 - what's wrong with `foldl`
