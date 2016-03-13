@@ -9,3 +9,10 @@ Study group questions:
 - what's the benefit of `($)`
 - order of arguments to a function
 - why do some people call it point-less style
+
+## Lecture 03
+
+http://www.seas.upenn.edu/~cis194/lectures/03-ADTs.html
+
+Study group questions:
+- what are algebraic data types (ADTs)? 
