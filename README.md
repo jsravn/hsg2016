@@ -20,3 +20,4 @@ Study group questions:
 - type constructor vs data constructor?
 - examples of Kinds
 - type annotations (e.g. `:: Char -> Bool`) must have which kinds?
+- analogy for foldr to list construction
