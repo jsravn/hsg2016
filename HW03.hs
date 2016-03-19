@@ -44,16 +44,16 @@ empty = const 0
 evalE :: State -> Expression -> Int
 evalE st (Var name)      = st name
 evalE _ (Val value)      = value
-evalE st (Op le op re)
-    | op == Plus   = l + r
-    | op == Minus  = l - r
-    | op == Times  = l * r
-    | op == Divide = l `div` r
-    | op == Gt     = toInt $ l > r
-    | op == Ge     = toInt $ l >= r
-    | op == Lt     = toInt $ l < r
-    | op == Le     = toInt $ l <= r
-    | op == Eql    = toInt $ l == r
+evalE st (Op le op re) = case op of
+    Plus   -> l + r
+    Minus  -> l - r
+    Times  -> l * r
+    Divide -> l `div` r
+    Gt     -> toInt $ l > r
+    Ge     -> toInt $ l >= r
+    Lt     -> toInt $ l < r
+    Le     -> toInt $ l <= r
+    Eql    -> toInt $ l == r
     where
         l = evalE st le
         r = evalE st re
