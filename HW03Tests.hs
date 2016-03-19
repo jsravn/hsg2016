@@ -1,7 +1,7 @@
 module HW03Tests where
 
-import HW03
-import Test.HUnit
+import           HW03
+import           Test.HUnit
 
 evalTests :: Test
 evalTests = TestList
@@ -31,7 +31,7 @@ desugarTests = TestList
         (desugar $ Sequence Skip Skip)
       )
     , TestCase (assertEqual "skip"
-        (DSkip)
+        DSkip
         (desugar Skip)
       )
     , TestCase (assertEqual "incr"
@@ -57,6 +57,11 @@ desugarTests = TestList
             (Assign "B" (Op (Var "B") Plus (Val 2)))
         )
       )
+    ]
+
+evalSimpleTests :: Test
+evalSimpleTests = TestList
+    [
     ]
 
 -- Add tests below to be run
