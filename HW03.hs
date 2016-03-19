@@ -42,8 +42,8 @@ empty = const 0
 -- Exercise 2 -----------------------------------------
 
 evalE :: State -> Expression -> Int
-evalE st (Var name)      = st name
-evalE _ (Val value)      = value
+evalE st (Var name)    = st name
+evalE _ (Val value)    = value
 evalE st (Op le op re) = case op of
     Plus   -> l + r
     Minus  -> l - r
@@ -54,6 +54,7 @@ evalE st (Op le op re) = case op of
     Lt     -> toInt $ l < r
     Le     -> toInt $ l <= r
     Eql    -> toInt $ l == r
+
     where
         l = evalE st le
         r = evalE st re
@@ -69,24 +70,37 @@ data DietStatement = DAssign String Expression
                      deriving (Show, Eq)
 
 desugar :: Statement -> DietStatement
-desugar Skip = DSkip
-desugar (Assign name ex) = DAssign name ex
-desugar (If ex st1 st2) = DIf ex (desugar st1) (desugar st2)
-desugar (While ex st) = DWhile ex (desugar st)
-desugar (Sequence st1 st2) = DSequence (desugar st1) (desugar st2)
-desugar (Incr name) = DAssign name (Op (Var name) Plus (Val 1))
-desugar (For s1 ex s2 s3) =
+desugar (Assign name e)  = DAssign name e
+desugar (Incr name)      = DAssign name (Op (Var name) Plus (Val 1))
+desugar (If e s1 s2)     = DIf e (desugar s1) (desugar s2)
+desugar (While e s)      = DWhile e (desugar s)
+desugar (For s1 e s2 s3) =
     DSequence
-      (desugar s1)
-      (DWhile ex (DSequence (desugar s3) (desugar s2)))
+        (desugar s1)
+        (DWhile e (DSequence (desugar s3) (desugar s2)))
+desugar (Sequence s1 s2) = DSequence (desugar s1) (desugar s2)
+desugar Skip             = DSkip
 
 -- Exercise 4 -----------------------------------------
 
 evalSimple :: State -> DietStatement -> State
-evalSimple = undefined
+evalSimple st ds = case ds of
+    DAssign name e      -> extend st name (evalE st e)
+    DIf e ds1 ds2
+        | evalE' e == 1 -> evalSimple' ds1
+        | otherwise     -> evalSimple' ds2
+    DWhile e ds1
+        | evalE' e == 1 -> evalSimple' $ DSequence ds1 (DWhile e ds1)
+        | otherwise     -> st
+    DSequence ds1 ds2   -> evalSimple (evalSimple' ds1) ds2
+    DSkip               -> st
+
+    where
+        evalE'      = evalE st
+        evalSimple' = evalSimple st
 
 run :: State -> Statement -> State
-run = undefined
+run st stmt = evalSimple st (desugar stmt)
 
 -- Programs -------------------------------------------
 

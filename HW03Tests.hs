@@ -5,16 +5,14 @@ import           Test.HUnit
 
 evalTests :: Test
 evalTests = TestList
-    [
-      TestCase (assertEqual "" 5 (evalE empty (Val 5)))
+    [ TestCase (assertEqual "" 5 (evalE empty (Val 5)))
     , TestCase (assertEqual "" 0 (evalE empty (Op (Val 1) Eql (Val 2))))
     , TestCase (assertEqual "" 3 (evalE (extend empty "B" 3) (Var "B")))
     ]
 
 desugarTests :: Test
 desugarTests = TestList
-    [
-      TestCase (assertEqual "assign"
+    [ TestCase (assertEqual "assign"
         (DAssign "A" (Val 3))
         (desugar $ Assign "A" (Val 3))
       )
@@ -60,18 +58,25 @@ desugarTests = TestList
     ]
 
 evalSimpleTests :: Test
-evalSimpleTests = TestList
-    [
+evalSimpleTests =
+    TestCase (assertEqual "assign" 10 (evalSimple empty (DAssign "A" (Val 10)) "A"))
+
+runStuffTests :: Test
+runStuffTests = TestList
+    [ TestCase (assertEqual "factorial" 24 ((run (extend empty "In" 4) factorial) "Out"))
+    , TestCase (assertEqual "sqrt" 9 ((run (extend empty "A" 81) squareRoot) "B"))
+    , TestCase (assertEqual "fib" 514229 ((run (extend empty "In" 28) fibonacci) "Out"))
     ]
 
 -- Add tests below to be run
 
 tests :: Test
 tests = TestList
-    [
-      TestLabel "empty state" (TestCase (assertEqual "empty" 0 (empty "B")))
+    [ TestLabel "empty state" (TestCase (assertEqual "empty" 0 (empty "B")))
     , TestLabel "evalE" evalTests
     , TestLabel "desugar" desugarTests
+    , TestLabel "evalSimple" evalSimpleTests
+    , TestLabel "run" runStuffTests
     ]
 
 runTests :: IO Counts
