@@ -21,3 +21,9 @@ Study group questions:
 - examples of Kinds
 - type annotations (e.g. `:: Char -> Bool`) must have which kinds?
 - analogy for foldr to list construction
+
+## Lecture 04
+
+Study group questions:
+- what is a type constructor?
+- what is ad-hoc polymorphism?
