@@ -20,20 +20,24 @@ instance (Num a, Eq a) => Eq (Poly a) where
 -- Exercise 3 -----------------------------------------
 
 instance (Num a, Eq a, Show a) => Show (Poly a) where
-    show (P as) = emptyWith0 . concat . reverse . intersperse (" + ") . filter (/= "") . map showA . zip [0..] $ as
+    show (P as) = concatCoeffs . mapCoeffs $ as
         where
-            showA (i, a)
-                | a == fromInteger 0 = ""
-                | a == fromInteger 1
-                    && i == 0        = "1"
-                | a == fromInteger 1 = coeff i
-                | otherwise          = show a ++ coeff i
-            coeff :: Int -> String
-            coeff i
-                | i == 0    = ""
-                | i == 1    = "x"
-                | otherwise = "x^" ++ show i
-            emptyWith0 s
+            concatCoeffs = replaceEmptyWith0 . concat . reverse . intersperse (" + ")
+            mapCoeffs = filter (/= "") . map showA . zip [0..]
+            showA (e, c)
+                | c == fromInteger 0     = ""
+                | abs c == fromInteger 1 = show1 (e, c)
+                | otherwise              = show c ++ showExp e
+            show1 (e, c)
+                | e == 0    = show c
+                | c == -1   = "-" ++ showExp e
+                | otherwise = showExp e
+            showExp :: Int -> String
+            showExp e
+                | e == 0    = ""
+                | e == 1    = "x"
+                | otherwise = "x^" ++ show e
+            replaceEmptyWith0 s
                 | s == ""   = "0"
                 | otherwise = s
 
