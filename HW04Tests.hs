@@ -26,6 +26,12 @@ showTests = TestList
     , TestCase (assertEqual "x" "x" (show (x :: Poly Int)))
     , TestCase (assertEqual "leading zeros dropped" "3x^3" (show (P [0, 0, 0, 3, 0, 0] :: Poly Int)))
     ]
+
+plusTests :: Test
+plusTests = TestList
+    [ TestCase (assertEqual "" (P [6, 1, 3] :: Poly Int) (P [5, 0, 1] + P [1, 1, 2]))
+    , TestCase (assertEqual "" (P [2, 1, 1] :: Poly Int) (P [1, 0, 1] + P [1, 1]))
+    ]
 --
 
 runTests :: IO Counts
@@ -33,4 +39,5 @@ runTests = runTestTT $ TestList
     [ TestLabel "test x" xTests
     , TestLabel "test Eq" equalTests
     , TestLabel "test show" showTests
+    , TestLabel "test plus" plusTests
     ]

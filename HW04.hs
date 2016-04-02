@@ -51,8 +51,13 @@ instance (Num a, Eq a, Show a) => Show (Poly a) where
 
 -- Exercise 4 -----------------------------------------
 
+addLists :: Num a => [a] -> [a] -> [a]
+addLists as [] = as
+addLists [] bs = bs
+addLists (a:as) (b:bs) = a + b : addLists as bs
+
 plus :: Num a => Poly a -> Poly a -> Poly a
-plus = undefined
+plus (P as) (P bs) = P $ addLists as bs
 
 -- Exercise 5 -----------------------------------------
 
