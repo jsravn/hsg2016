@@ -8,7 +8,7 @@ newtype Poly a = P [a]
 -- Exercise 1 -----------------------------------------
 
 x :: Num a => Poly a
-x = P [fromInteger 0, fromInteger 1]
+x = P [0, 1]
 
 -- Exercise 2 ----------------------------------------
 
@@ -19,27 +19,35 @@ instance (Num a, Eq a) => Eq (Poly a) where
 
 -- Exercise 3 -----------------------------------------
 
+showTerm :: (Num a, Eq a, Show a) => Int -> a -> String
+showTerm ex coeff
+    | coeff == 0     = ""
+    | abs coeff == 1 = show1 ex coeff
+    | otherwise      = show coeff ++ showX ex
+    where
+        show1 e c
+            | e == 0    = show c
+            | c == -1   = "-" ++ showX e
+            | otherwise = showX e
+
+showX :: Int -> String
+showX ex
+    | ex == 0   = ""
+    | ex == 1   = "x"
+    | otherwise = "x^" ++ show ex
+
+showTerms :: (Num a, Eq a, Show a) => Poly a -> [String]
+showTerms (P as) = filter (/= "") . zipWith showTerm [0..] $ as
+
+concatTerms :: [String] -> String
+concatTerms = replaceEmptyWith0 . concat . reverse . intersperse " + "
+    where
+        replaceEmptyWith0 s
+            | s == ""   = "0"
+            | otherwise = s
+
 instance (Num a, Eq a, Show a) => Show (Poly a) where
-    show (P as) = concatCoeffs . mapCoeffs $ as
-        where
-            concatCoeffs = replaceEmptyWith0 . concat . reverse . intersperse (" + ")
-            mapCoeffs = filter (/= "") . map showA . zip [0..]
-            showA (e, c)
-                | c == fromInteger 0     = ""
-                | abs c == fromInteger 1 = show1 (e, c)
-                | otherwise              = show c ++ showExp e
-            show1 (e, c)
-                | e == 0    = show c
-                | c == -1   = "-" ++ showExp e
-                | otherwise = showExp e
-            showExp :: Int -> String
-            showExp e
-                | e == 0    = ""
-                | e == 1    = "x"
-                | otherwise = "x^" ++ show e
-            replaceEmptyWith0 s
-                | s == ""   = "0"
-                | otherwise = s
+    show = concatTerms . showTerms
 
 -- Exercise 4 -----------------------------------------
 
