@@ -27,3 +27,4 @@ Study group questions:
 Study group questions:
 - what is a type constructor?
 - what is ad-hoc polymorphism?
+- multi dispatch
