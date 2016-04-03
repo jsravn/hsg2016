@@ -103,4 +103,4 @@ derivTerm :: Num a => Integer -> a -> a
 derivTerm ex coeff = fromInteger ex * coeff
 
 instance Num a => Differentiable (Poly a) where
-    deriv (P as) = P . drop 1 . zipWith derivTerm ([0..] :: [Integer]) $ as
+    deriv (P as) = P . drop 1 . zipWith derivTerm [0..] $ as
