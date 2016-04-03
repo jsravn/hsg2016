@@ -37,6 +37,12 @@ timesTests :: Test
 timesTests = TestList
     [ TestCase (assertEqual "" (P [2, 4, 4, 2] :: Poly Int) (P [1, 1, 1] * P [2, 2]))
     ]
+
+instanceTests :: Test
+instanceTests = TestList
+    [ TestCase (assertEqual "" (P [-1, -2, -3] :: Poly Int) (negate $ P [1, 2, 3]))
+    , TestCase (assertEqual "" (P [99] :: Poly Int) 99)
+    ]
 --
 
 runTests :: IO Counts
@@ -46,4 +52,5 @@ runTests = runTestTT $ TestList
     , TestLabel "test show" showTests
     , TestLabel "test plus" plusTests
     , TestLabel "test times" timesTests
+    , TestLabel "test instance" instanceTests
     ]

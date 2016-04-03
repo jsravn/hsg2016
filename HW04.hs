@@ -76,8 +76,8 @@ times (P as) (P bs) = sumPolys . map P $ multLists as bs
 instance Num a => Num (Poly a) where
     (+) = plus
     (*) = times
-    negate      = undefined
-    fromInteger = undefined
+    negate      = (* P [-1])
+    fromInteger = P . (:[]) . fromInteger
     -- No meaningful definitions exist
     abs    = undefined
     signum = undefined
