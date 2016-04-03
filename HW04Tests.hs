@@ -32,6 +32,11 @@ plusTests = TestList
     [ TestCase (assertEqual "" (P [6, 1, 3] :: Poly Int) (P [5, 0, 1] + P [1, 1, 2]))
     , TestCase (assertEqual "" (P [2, 1, 1] :: Poly Int) (P [1, 0, 1] + P [1, 1]))
     ]
+
+timesTests :: Test
+timesTests = TestList
+    [ TestCase (assertEqual "" (P [2, 4, 4, 2] :: Poly Int) (P [1, 1, 1] * P [2, 2]))
+    ]
 --
 
 runTests :: IO Counts
@@ -40,4 +45,5 @@ runTests = runTestTT $ TestList
     , TestLabel "test Eq" equalTests
     , TestLabel "test show" showTests
     , TestLabel "test plus" plusTests
+    , TestLabel "test times" timesTests
     ]

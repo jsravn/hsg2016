@@ -61,8 +61,15 @@ plus (P as) (P bs) = P $ addLists as bs
 
 -- Exercise 5 -----------------------------------------
 
+multLists :: Num a => [a] -> [a] -> [[a]]
+multLists [] _      = []
+multLists (a:as) bs = map (*a) bs : multLists as (0:bs)
+
+sumPolys :: Num a => [Poly a] -> Poly a
+sumPolys = foldr (+) (P [0])
+
 times :: Num a => Poly a -> Poly a -> Poly a
-times = undefined
+times (P as) (P bs) = sumPolys . map P $ multLists as bs
 
 -- Exercise 6 -----------------------------------------
 
@@ -70,7 +77,7 @@ instance Num a => Num (Poly a) where
     (+) = plus
     (*) = times
     negate      = undefined
-    fromInteger = P . (:[]) . fromInteger
+    fromInteger = undefined
     -- No meaningful definitions exist
     abs    = undefined
     signum = undefined
