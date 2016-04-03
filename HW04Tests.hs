@@ -49,6 +49,12 @@ applyTests = TestList
     [ TestCase (assertEqual "" (4 :: Int) (applyP (x^2 + 2*x + 1) 1))
     , TestCase (assertEqual "" (9 :: Int) (applyP (x^2 + 2*x + 1) 2))
     ]
+
+derivTests :: Test
+derivTests = TestList
+    [ TestCase (assertEqual "" (2*x + 3) (deriv (x^2 +3*x + 5)))
+    , TestCase (assertEqual "" (1008*x^6 - 18) (nderiv 3 (2*x^9 - 3*x^3 + 2)))
+    ]
 --
 
 runTests :: IO Counts
@@ -60,4 +66,5 @@ runTests = runTestTT $ TestList
     , TestLabel "test times" timesTests
     , TestLabel "test instance" instanceTests
     , TestLabel "test applyP" applyTests
+    , TestLabel "test deriv" derivTests
     ]

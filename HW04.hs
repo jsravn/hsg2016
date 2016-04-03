@@ -95,10 +95,12 @@ applyP (P as) val = sum $ zipWith evalTerm ([0..] :: [Int]) as
 class Num a => Differentiable a where
     deriv  :: a -> a
     nderiv :: Int -> a -> a
-    nderiv = undefined
+    nderiv n = head . drop n . iterate deriv
 
 -- Exercise 9 -----------------------------------------
 
-instance Num a => Differentiable (Poly a) where
-    deriv = undefined
+derivTerm :: Num a => Integer -> a -> a
+derivTerm ex coeff = fromInteger ex * coeff
 
+instance Num a => Differentiable (Poly a) where
+    deriv (P as) = P . drop 1 . zipWith derivTerm ([0..] :: [Integer]) $ as
