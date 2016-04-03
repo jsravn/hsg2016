@@ -84,8 +84,11 @@ instance Num a => Num (Poly a) where
 
 -- Exercise 7 -----------------------------------------
 
+
 applyP :: Num a => Poly a -> a -> a
-applyP = undefined
+applyP (P as) val = sum $ zipWith evalTerm ([0..] :: [Int]) as
+    where
+        evalTerm ex coeff = val^ex * coeff
 
 -- Exercise 8 -----------------------------------------
 
