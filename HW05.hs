@@ -35,8 +35,14 @@ parseFile = liftA decode . BS.readFile
 
 -- Exercise 4 -----------------------------------------
 
+filterTIds :: [TId] -> [Transaction] -> [Transaction]
+filterTIds tids = filter ((`elem` tids) . tid)
+
 getBadTs :: FilePath -> FilePath -> IO (Maybe [Transaction])
-getBadTs = undefined
+getBadTs pathA pathB = do
+    victims <- parseFile pathA
+    transactions <- parseFile pathB
+    return $ liftA2 filterTIds victims transactions
 
 -- Exercise 5 -----------------------------------------
 
