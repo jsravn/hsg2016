@@ -22,7 +22,11 @@ getSecret pathA pathB = liftA (BS.pack . filter (/= 0))
 -- Exercise 2 -----------------------------------------
 
 decryptWithKey :: ByteString -> FilePath -> IO ()
-decryptWithKey = undefined
+decryptWithKey key path = do
+    let encPath = path ++ ".enc"
+    encBs <- BS.readFile encPath
+    let decBs = BS.pack $ BS.zipWith xor (BS.cycle key) encBs
+    BS.writeFile path decBs
 
 -- Exercise 3 -----------------------------------------
 
