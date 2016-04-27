@@ -46,8 +46,11 @@ getBadTs pathA pathB = do
 
 -- Exercise 5 -----------------------------------------
 
+insertT :: Transaction -> Map String Integer -> Map String Integer
+insertT t = Map.insert (to t) (amount t) . Map.insert (from t) (-1 * amount t)
+
 getFlow :: [Transaction] -> Map String Integer
-getFlow = undefined
+getFlow = foldr insertT Map.empty
 
 -- Exercise 6 -----------------------------------------
 
