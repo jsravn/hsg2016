@@ -54,8 +54,12 @@ getFlow = foldr insertT Map.empty
 
 -- Exercise 6 -----------------------------------------
 
+reverseMap :: Map String Integer -> Map Integer String
+reverseMap = Map.foldrWithKey (flip Map.insert) Map.empty
+
+
 getCriminal :: Map String Integer -> String
-getCriminal = undefined
+getCriminal = snd . Map.findMax . reverseMap
 
 -- Exercise 7 -----------------------------------------
 

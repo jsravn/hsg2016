@@ -17,7 +17,15 @@ flowTest = TestCase (assertEqual ""
                              }
               ]))
 
+criminalTest :: Test
+criminalTest = TestCase (assertEqual ""
+    "Simon Peyton Jones"
+    (getCriminal $ Map.fromList [ ("Haskell Curry", -10)
+                                , ("Simon Peyton Jones", 10)
+                                ]))
+
 runTests :: IO Counts
 runTests = runTestTT $ TestList
     [ flowTest
+    , criminalTest
     ]
