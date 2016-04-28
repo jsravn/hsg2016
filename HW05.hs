@@ -5,6 +5,8 @@ module HW05 where
 import Control.Applicative
 import Data.Bits
 import Data.ByteString.Lazy (ByteString)
+import Data.List
+import Data.Ord
 import Data.Map.Strict (Map)
 import System.Environment (getArgs)
 
@@ -68,8 +70,23 @@ getCriminal = snd . Map.findMax . reverseMap
 
 -- Exercise 7 -----------------------------------------
 
+undoTs' :: [(String, Integer)] -> [(String, Integer)] -> [TId] -> [Transaction]
+undoTs' [] _ _ = []
+undoTs' _ [] _ = []
+undoTs' _ _ [] = []
+undoTs' ((payerName, payerAmt):payers) ((payeeName, payeeAmt):payees) (tid:tids)
+  | payerAmt >  abs payeeAmt = createT payeeAmt : undoTs' ((payerName, payerAmt + payeeAmt):payers) payees tids
+  | payerAmt <  abs payeeAmt = createT payerAmt : undoTs' payers ((payeeName, payeeAmt + payerAmt):payees) tids
+  | payerAmt == abs payeeAmt = createT payerAmt : undoTs' payers payees tids
+  where
+    createT amt = Transaction { from = payerName, to = payeeName, amount = abs amt, tid = tid }
+
 undoTs :: Map String Integer -> [TId] -> [Transaction]
-undoTs flow tids = zipWith 
+undoTs flow = undoTs' payers payees
+  where
+    pFlow  = Map.partition (> 0) flow
+    payers = sortBy (flip $ comparing snd) . Map.toList . fst $ pFlow
+    payees = sortBy (comparing snd) . Map.toList . snd $ pFlow
 
 -- Exercise 8 -----------------------------------------
 
