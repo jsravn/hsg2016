@@ -69,7 +69,7 @@ getCriminal = snd . Map.findMax . reverseMap
 -- Exercise 7 -----------------------------------------
 
 undoTs :: Map String Integer -> [TId] -> [Transaction]
-undoTs = undefined
+undoTs flow tids = zipWith 
 
 -- Exercise 8 -----------------------------------------
 

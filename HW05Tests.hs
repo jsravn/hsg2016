@@ -29,8 +29,28 @@ criminalTest = TestCase (assertEqual ""
                                 , ("Simon Peyton Jones", 10)
                                 ]))
 
+undoTest :: Test
+undoTest = TestCase (assertEqual ""
+  [ Transaction { from = "Simon Peyton Jones"
+                , to = "Haskell Curry"
+                , amount = 5
+                , tid = "sampletid"
+                }
+  , Transaction { from = "Simon Peyton Jones"
+                , to = "Donald Duck"
+                , amount = 2
+                , tid = "sampletid"
+                }
+  ]
+  (undoTs (Map.fromList [ ("Haskell Curry", -5)
+                        , ("Simon Peyton Jones", 7)
+                        , ("Donald Duck", -2)
+                        ])
+          (repeat "sampletid")))
+
 runTests :: IO Counts
 runTests = runTestTT $ TestList
     [ flowTest
     , criminalTest
+    , undoTest
     ]
