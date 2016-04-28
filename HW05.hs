@@ -46,17 +46,22 @@ getBadTs pathA pathB = do
 
 -- Exercise 5 -----------------------------------------
 
-insertT :: Transaction -> Map String Integer -> Map String Integer
-insertT t = Map.insert (to t) (amount t) . Map.insert (from t) (-1 * amount t)
+addIfExists :: String -> Integer -> Map String Integer -> Map String Integer
+addIfExists k v = Map.alter addValue k
+  where
+    addValue Nothing = Just v
+    addValue (Just p) = Just (v + p)
+
+updateT :: Transaction -> Map String Integer -> Map String Integer
+updateT t = addIfExists (to t) (amount t) . addIfExists (from t) (-1 * amount t)
 
 getFlow :: [Transaction] -> Map String Integer
-getFlow = foldr insertT Map.empty
+getFlow = foldr updateT Map.empty
 
 -- Exercise 6 -----------------------------------------
 
 reverseMap :: Map String Integer -> Map Integer String
 reverseMap = Map.foldrWithKey (flip Map.insert) Map.empty
-
 
 getCriminal :: Map String Integer -> String
 getCriminal = snd . Map.findMax . reverseMap
