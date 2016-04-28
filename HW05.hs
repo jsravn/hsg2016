@@ -1,19 +1,20 @@
 {-# OPTIONS_GHC -Wall #-}
-{-# LANGUAGE OverloadedStrings, RecordWildCards #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE RecordWildCards   #-}
 module HW05 where
 
-import Control.Applicative
-import Data.Bits
-import Data.ByteString.Lazy (ByteString)
-import Data.List
-import Data.Ord
-import Data.Map.Strict (Map)
-import System.Environment (getArgs)
+import           Control.Applicative
+import           Data.Bits
+import           Data.ByteString.Lazy (ByteString)
+import           Data.List
+import           Data.Map.Strict      (Map)
+import           Data.Ord
+import           System.Environment   (getArgs)
 
 import qualified Data.ByteString.Lazy as BS
-import qualified Data.Map.Strict as Map
+import qualified Data.Map.Strict      as Map
 
-import Parser
+import           Parser
 
 -- Exercise 1 -----------------------------------------
 
@@ -71,15 +72,13 @@ getCriminal = snd . Map.findMax . reverseMap
 -- Exercise 7 -----------------------------------------
 
 undoTs' :: [(String, Integer)] -> [(String, Integer)] -> [TId] -> [Transaction]
-undoTs' [] _ _ = []
-undoTs' _ [] _ = []
-undoTs' _ _ [] = []
 undoTs' ((payerName, payerAmt):payers) ((payeeName, payeeAmt):payees) (tid:tids)
   | payerAmt >  abs payeeAmt = createT payeeAmt : undoTs' ((payerName, payerAmt + payeeAmt):payers) payees tids
   | payerAmt <  abs payeeAmt = createT payerAmt : undoTs' payers ((payeeName, payeeAmt + payerAmt):payees) tids
   | payerAmt == abs payeeAmt = createT payerAmt : undoTs' payers payees tids
   where
     createT amt = Transaction { from = payerName, to = payeeName, amount = abs amt, tid = tid }
+undoTs' _ _ _ = []
 
 undoTs :: Map String Integer -> [TId] -> [Transaction]
 undoTs flow = undoTs' payers payees
@@ -91,7 +90,7 @@ undoTs flow = undoTs' payers payees
 -- Exercise 8 -----------------------------------------
 
 writeJSON :: ToJSON a => FilePath -> a -> IO ()
-writeJSON = undefined
+writeJSON path = BS.writeFile path . encode
 
 -- Exercise 9 -----------------------------------------
 
@@ -108,14 +107,14 @@ doEverything dog1 dog2 trans vict fids out = do
       case mids of
         Nothing  -> error "No ids"
         Just ids -> do
-          let flow = getFlow ts       
+          let flow = getFlow ts
           writeJSON out (undoTs flow ids)
           return (getCriminal flow)
 
 main :: IO ()
 main = do
   args <- getArgs
-  crim <- 
+  crim <-
     case args of
       dog1:dog2:trans:vict:ids:out:_ ->
           doEverything dog1 dog2 trans vict ids out

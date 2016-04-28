@@ -1,9 +1,9 @@
 module HW05Tests where
 
-import HW05
-import Test.HUnit
-import Parser
 import qualified Data.Map.Strict as Map
+import           HW05
+import           Parser
+import           Test.HUnit
 
 flowTest :: Test
 flowTest = TestCase (assertEqual ""
