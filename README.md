@@ -28,3 +28,9 @@ Study group questions:
 - what is a type constructor?
 - what is ad-hoc polymorphism?
 - multi dispatch
+
+## Lecture 06
+
+- Why does purity and laziness go hand in hand?
+- Examples of laziness in strict languages
+
