@@ -73,19 +73,23 @@ rand = sIterate lcg
 
 -- Exercise 8 -----------------------------------------
 
-{- Total Memory in use: ??? MB -}
+{- Total Memory in use: 238 MB -}
 minMaxSlow :: [Int] -> Maybe (Int, Int)
 minMaxSlow [] = Nothing   -- no min or max if there are no elements
 minMaxSlow xs = Just (minimum xs, maximum xs)
 
 -- Exercise 9 -----------------------------------------
 
+updateMinMax :: Int -> Maybe (Int, Int) -> Maybe (Int, Int)
+updateMinMax val Nothing = Just (val, val)
+updateMinMax val (Just (minVal, maxVal)) = Just (min val minVal, max val maxVal)
+
 {- Total Memory in use: ??? MB -}
 minMax :: [Int] -> Maybe (Int, Int)
-minMax = undefined
+minMax = foldl' (flip updateMinMax) Nothing
 
 main :: IO ()
-main = print $ minMaxSlow $ sTake 1000000 $ rand 7666532
+main = print $ minMax $ sTake 1000000 $ rand 7666532
 
 -- Exercise 10 ----------------------------------------
 
