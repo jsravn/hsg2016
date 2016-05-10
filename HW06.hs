@@ -55,10 +55,13 @@ sTake n (Cons a rest)
 -- Exercise 6 -----------------------------------------
 
 nats :: Stream Integer
-nats = undefined
+nats = sIterate (+ 1) 0
 
 ruler :: Stream Integer
-ruler = undefined
+ruler = sInterleave zeros twos
+  where
+    zeros = sRepeat 0
+    twos = sInterleave (sRepeat 1) (sIterate (+1) 2)
 
 -- Exercise 7 -----------------------------------------
 
