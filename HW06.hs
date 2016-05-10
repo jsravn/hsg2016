@@ -48,7 +48,9 @@ sInterleave :: Stream a -> Stream a -> Stream a
 sInterleave (Cons a rest) next = Cons a $ sInterleave next rest
 
 sTake :: Int -> Stream a -> [a]
-sTake = undefined
+sTake n (Cons a rest)
+  | n <= 0    = []
+  | otherwise = a : sTake (n - 1) rest
 
 -- Exercise 6 -----------------------------------------
 
