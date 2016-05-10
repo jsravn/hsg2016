@@ -67,7 +67,9 @@ ruler = sInterleave zeros twos
 
 -- | Implementation of C rand
 rand :: Int -> Stream Int
-rand = undefined
+rand = sIterate lcg
+  where
+    lcg prev = (1103515245 * prev + 12345) `mod` 2147483648
 
 -- Exercise 8 -----------------------------------------
 
