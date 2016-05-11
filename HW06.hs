@@ -1,4 +1,5 @@
 {-# OPTIONS_GHC -Wall #-}
+{-# LANGUAGE BangPatterns #-}
 module HW06 where
 
 import Data.List
@@ -82,9 +83,9 @@ minMaxSlow xs = Just (minimum xs, maximum xs)
 
 updateMinMax :: Int -> Maybe (Int, Int) -> Maybe (Int, Int)
 updateMinMax val Nothing = Just (val, val)
-updateMinMax val (Just (minVal, maxVal)) = Just (min val minVal, max val maxVal)
+updateMinMax val (Just (!minVal, !maxVal)) = Just (min val minVal, max val maxVal)
 
-{- Total Memory in use: ??? MB -}
+{- Total Memory in use: 1 MB -}
 minMax :: [Int] -> Maybe (Int, Int)
 minMax = foldl' (flip updateMinMax) Nothing
 
