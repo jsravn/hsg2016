@@ -18,18 +18,21 @@ import qualified Data.Vector as V
 -- Exercise 1 -----------------------------------------
 
 liftM :: Monad m => (a -> b) -> m a -> m b
-liftM = undefined
+liftM f m1 = m1 >>= return . f
 
 swapV :: Int -> Int -> Vector a -> Maybe (Vector a)
-swapV = undefined
+swapV idxA idxB v = do
+    a <- v !? idxA
+    b <- v !? idxB
+    return $ v // [(idxA, b), (idxB, a)]
 
 -- Exercise 2 -----------------------------------------
 
 mapM :: Monad m => (a -> m b) -> [a] -> m [b]
-mapM = undefined
+mapM mf as = sequence $ map mf as
 
 getElts :: [Int] -> Vector a -> Maybe [a]
-getElts = undefined
+getElts indices v = mapM (v !?) indices
 
 -- Exercise 3 -----------------------------------------
 
