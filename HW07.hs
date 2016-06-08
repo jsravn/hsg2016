@@ -21,10 +21,13 @@ liftM :: Monad m => (a -> b) -> m a -> m b
 liftM f m1 = m1 >>= return . f
 
 swapV :: Int -> Int -> Vector a -> Maybe (Vector a)
-swapV idxA idxB v = do
-    a <- v !? idxA
-    b <- v !? idxB
-    return $ v // [(idxA, b), (idxB, a)]
+swapV idxA idxB v = liftM2 swapPure (v !? idxA) (v !? idxB)
+  where
+    swapPure a b = v // [(idxA, b), (idxB, a)]
+--swapV idxA idxB v = do
+--    a <- v !? idxA
+--    b <- v !? idxB
+--    return $ v // [(idxA, b), (idxB, a)]
 
 -- Exercise 2 -----------------------------------------
 
