@@ -50,10 +50,10 @@ randomElt v = do
 -- Exercise 4 -----------------------------------------
 
 randomVec :: Random a => Int -> Rnd (Vector a)
-randomVec = undefined
+randomVec n = V.replicateM n getRandom
 
 randomVecR :: Random a => Int -> (a, a) -> Rnd (Vector a)
-randomVecR = undefined
+randomVecR n r = V.replicateM n $ getRandomR r
 
 -- Exercise 5 -----------------------------------------
 
