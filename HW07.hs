@@ -57,8 +57,16 @@ randomVecR n r = V.replicateM n $ getRandomR r
 
 -- Exercise 5 -----------------------------------------
 
+swapRnd :: Vector a -> Int -> Rnd (Vector a)
+swapRnd v i = do
+  j <- getRandomR (0, i)
+  return $ v // [(i, v ! j), (j, v ! i)]
+
 shuffle :: Vector a -> Rnd (Vector a)
-shuffle = undefined
+shuffle v = do
+  let l = V.length v
+  let indices = V.enumFromStepN (l - 1) (-1) (l - 2)
+  foldM swapRnd v indices
 
 -- Exercise 6 -----------------------------------------
 
