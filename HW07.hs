@@ -42,7 +42,10 @@ getElts indices v = mapM (v !?) indices
 type Rnd a = Rand StdGen a
 
 randomElt :: Vector a -> Rnd (Maybe a)
-randomElt = undefined
+randomElt v = do
+  let l = V.length v
+  r <- getRandomR (0, l)
+  return $ v !? r
 
 -- Exercise 4 -----------------------------------------
 
