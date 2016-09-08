@@ -70,8 +70,17 @@ shuffle v = do
 
 -- Exercise 6 -----------------------------------------
 
+partIt :: Ord a => a -> (Vector a, a, Vector a) -> (Vector a, a, Vector a)
+partIt val (v1, pivotVal, v2)
+  | val < pivotVal = (V.cons val v1, pivotVal, v2)
+  | otherwise      = (v1, pivotVal, V.cons val v2)
+
 partitionAt :: Ord a => Vector a -> Int -> (Vector a, a, Vector a)
-partitionAt = undefined
+partitionAt v pivot = V.foldr partIt initAcc v'
+  where
+    initAcc = (V.fromList [], v ! pivot, V.fromList [])
+    l = V.length v
+    v' = (V.++) (V.take pivot v) (V.drop (pivot + 1) v)
 
 -- Exercise 7 -----------------------------------------
 
