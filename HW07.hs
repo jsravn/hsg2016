@@ -79,7 +79,6 @@ partitionAt :: Ord a => Vector a -> Int -> (Vector a, a, Vector a)
 partitionAt v pivot = V.foldr partIt initAcc v'
   where
     initAcc = (V.fromList [], v ! pivot, V.fromList [])
-    l = V.length v
     v' = (V.++) (V.take pivot v) (V.drop (pivot + 1) v)
 
 -- Exercise 7 -----------------------------------------
@@ -102,8 +101,20 @@ qsort v
 
 -- Exercise 8 -----------------------------------------
 
+combineIt :: Rnd (Vector a) -> a -> Rnd (Vector a) -> Rnd (Vector a)
+combineIt rndL val rndR = do
+  l <- rndL
+  r <- rndR
+  return $ l <> (val `cons` r)
+
 qsortR :: Ord a => Vector a -> Rnd (Vector a)
-qsortR = undefined
+qsortR v
+  | v == V.empty = return V.empty
+  | otherwise = do
+    let length = V.length v
+    pivot <- getRandomR (0, length - 1)
+    let (l, pv, r) = partitionAt v pivot
+    combineIt (qsortR l) pv (qsortR r)
 
 -- Exercise 9 -----------------------------------------
 
