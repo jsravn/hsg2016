@@ -66,7 +66,7 @@ shuffle :: Vector a -> Rnd (Vector a)
 shuffle v = do
   let l = V.length v
   let indices = V.enumFromStepN (l - 1) (-1) (l - 2)
-  foldM swapRnd v indices
+  V.foldM swapRnd v indices
 
 -- Exercise 6 -----------------------------------------
 
@@ -91,7 +91,14 @@ quicksort (x:xs) = quicksort [ y | y <- xs, y < x ]
                    <> (x : quicksort [ y | y <- xs, y >= x ])
 
 qsort :: Ord a => Vector a -> Vector a
-qsort = undefined
+qsort v
+  | v == V.empty = V.empty
+  | otherwise =
+    let x = V.head v
+        xs = V.tail v
+    in qsort [ y | y <- xs, y < x ]
+       <> (x `cons` qsort [ y | y <- xs, y >= x ])
+
 
 -- Exercise 8 -----------------------------------------
 
