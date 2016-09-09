@@ -120,7 +120,15 @@ qsortR v
 
 -- Selection
 select :: Ord a => Int -> Vector a -> Rnd (Maybe a)
-select = undefined
+select rank v
+  | rank >= V.length v = return Nothing
+  | otherwise = do
+    pivot <- getRandomR (0, V.length v - 1)
+    let (l, pv, r) = partitionAt v pivot
+    let lengthL = V.length l
+    if rank < lengthL then select rank l
+    else if rank > lengthL then select (rank - lengthL - 1) r
+    else return $ Just pv
 
 -- Exercise 10 ----------------------------------------
 
