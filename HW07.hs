@@ -141,7 +141,10 @@ newDeck = shuffle allCards
 -- Exercise 11 ----------------------------------------
 
 nextCard :: Deck -> Maybe (Card, Deck)
-nextCard = undefined
+nextCard deck = do
+  top <- deck !? 0
+  let rest = V.tail deck
+  return (top, rest)
 
 -- Exercise 12 ----------------------------------------
 
