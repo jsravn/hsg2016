@@ -149,7 +149,13 @@ nextCard deck = do
 -- Exercise 12 ----------------------------------------
 
 getCards :: Int -> Deck -> Maybe ([Card], Deck)
-getCards = undefined
+getCards n deck
+  | n <= 0 = Just ([], deck)
+  | otherwise = do
+    nextCard' <- nextCard deck
+    nextCards <- getCards (n - 1) (snd nextCard')
+
+    return (fst nextCard' : fst nextCards, snd nextCards)
 
 -- Exercise 13 ----------------------------------------
 
